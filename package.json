@@ -1,0 +1,10 @@
+{
+  "name": "todo-server",
+  "version": "1.0.0",
+  "description": "Server code for ToDo Project",
+  "main": "server.js",
+  "repository": "https://github.com/harsh2124/todo-server.git",
+  "author": "Harsh Patel <harsh.coderc@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
