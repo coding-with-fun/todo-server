@@ -1,4 +1,10 @@
+/**
+ * @author Harsh Patel
+ * @description MongoDB connection file.
+ */
+
 const mongoose = require("mongoose");
+const logger = require("./logger");
 
 const connectDB = async () => {
     try {
@@ -9,9 +15,9 @@ const connectDB = async () => {
             useFindAndModify: false,
         });
 
-        console.log("Mongo DB connected successfully...");
+        logger.info(`Mongo DB connected successfully...`);
     } catch (error) {
-        console.log(error.message);
+        logger.error(error.message);
         process.exit(1);
     }
 };

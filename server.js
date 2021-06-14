@@ -1,5 +1,11 @@
+/**
+ * @author Harsh Patel
+ * @description Main server file.
+ */
+
 const express = require("express");
 const connectDB = require("./config/db_connection");
+const logger = require("./config/logger");
 require("dotenv").config();
 
 const app = express();
@@ -9,6 +15,6 @@ app.use(express.json());
 
 connectDB().then(() => {
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}...`);
+        logger.info(`Server is running on port ${PORT}...`);
     });
 });
