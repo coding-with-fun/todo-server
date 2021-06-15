@@ -2,15 +2,22 @@ const logger = require("../../config/logger");
 const ToDoItem = require("../../models/todoItem");
 const User = require("../../models/user");
 
-exports.InsertTodo = async (req, res) => {
+exports.DeleteTodo = async (req, res) => {
     try {
-        const { title, description } = req.body;
+        const todoID = req.query.id;
 
-        const newToDoItem = new ToDoItem({
-            title,
-            description,
-        });
-        await newToDoItem.save();
+        if (!todoID) {
+            return res.status(400).json({
+                message: "ToDo ID is not passed.",
+            });
+        }
+
+        const deletedToDoItem = ToDoItem.findByIdAndDelete(todoID);
+        if (!deletedToDoItem) {
+            return res.status(400).json({
+                message: "ToDO item is not found with the given ID.",
+            });
+        }
 
         const userID = req.auth;
         const options = {
@@ -20,8 +27,8 @@ exports.InsertTodo = async (req, res) => {
         const user = await User.findByIdAndUpdate(
             userID,
             {
-                $push: {
-                    todoItems: newToDoItem._id,
+                $pull: {
+                    todoItems: todoID,
                 },
             },
             options
@@ -41,7 +48,7 @@ exports.InsertTodo = async (req, res) => {
         }
 
         return res.status(200).json({
-            message: "ToDo item added successfully.",
+            message: "ToDo item deleted successfully.",
             userDetails: user,
         });
     } catch (error) {
