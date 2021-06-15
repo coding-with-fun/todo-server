@@ -4,11 +4,11 @@ require("dotenv").config();
 const logger = require("../../config/logger");
 const User = require("../../models/user");
 
-exports.UserSignUp = async (req, res) => {
+exports.UserSignIn = async (req, res) => {
     try {
         const { name, username, email, password } = req.body;
 
-        const existingUser = await User.findOne({
+        let user = await User.findOne({
             $or: [
                 {
                     email,
@@ -17,21 +17,22 @@ exports.UserSignUp = async (req, res) => {
                     username,
                 },
             ],
-        });
-        if (existingUser) {
+        }).populate(
+            "transactionsList",
+            "_id title description category amount date"
+        );
+        if (!user) {
             return res.status(400).json({
-                message: "User already exists.",
-                userExists: true,
+                message: "User not found.",
+                userExists: false,
             });
         }
-
-        let user = new User({
-            name,
-            username,
-            email,
-            password,
-        });
-        await user.save();
+        if (!user.authenticate(password)) {
+            return res.status(400).json({
+                message: "Please check credentials.",
+                userExists: false,
+            });
+        }
 
         user = user.toJSON();
         delete user.salt;
@@ -47,8 +48,8 @@ exports.UserSignUp = async (req, res) => {
             }
         );
         return res.status(200).json({
-            message: "New user created successfully.",
-            userExists: false,
+            message: "User found.",
+            userExists: true,
             token,
             user,
         });
