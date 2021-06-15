@@ -6,7 +6,7 @@ const User = require("../../models/user");
 
 exports.UserSignIn = async (req, res) => {
     try {
-        const { name, username, email, password } = req.body;
+        const { username, email, password } = req.body;
 
         let user = await User.findOne({
             $or: [
@@ -17,10 +17,7 @@ exports.UserSignIn = async (req, res) => {
                     username,
                 },
             ],
-        }).populate(
-            "transactionsList",
-            "_id title description category amount date"
-        );
+        }).populate("todoItems", "_id title description category amount date");
         if (!user) {
             return res.status(400).json({
                 message: "User not found.",
