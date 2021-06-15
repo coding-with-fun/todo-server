@@ -17,17 +17,18 @@ exports.UserSignIn = async (req, res) => {
                     username,
                 },
             ],
-        }).populate("todoItems", "_id title description category amount date");
+        }).populate(
+            "todoItems",
+            "_id title description isCompleted createdAt updatedAt"
+        );
         if (!user) {
             return res.status(400).json({
                 message: "User not found.",
-                userExists: false,
             });
         }
         if (!user.authenticate(password)) {
             return res.status(400).json({
                 message: "Please check credentials.",
-                userExists: false,
             });
         }
 
@@ -46,9 +47,8 @@ exports.UserSignIn = async (req, res) => {
         );
         return res.status(200).json({
             message: "User found.",
-            userExists: true,
-            token,
-            user,
+            userToken: token,
+            userDetails: user,
         });
     } catch (error) {
         logger.error(error.message);

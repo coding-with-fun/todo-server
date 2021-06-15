@@ -21,7 +21,6 @@ exports.UserSignUp = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({
                 message: "User already exists.",
-                userExists: true,
             });
         }
 
@@ -48,9 +47,8 @@ exports.UserSignUp = async (req, res) => {
         );
         return res.status(200).json({
             message: "New user created successfully.",
-            userExists: false,
-            token,
-            user,
+            userToken: token,
+            userDetails: user,
         });
     } catch (error) {
         logger.error(error.message);

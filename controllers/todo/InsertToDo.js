@@ -26,21 +26,23 @@ exports.InsertTodo = async (req, res) => {
             },
             options
         )
-            .populate("todoItems", "_id title description category amount date")
+            .populate(
+                "todoItems",
+                "_id title description isCompleted createdAt updatedAt"
+            )
             .select({
                 encryptedPassword: 0,
                 salt: 0,
             });
         if (!user) {
-            return res.status(404).json({
+            return res.status(400).json({
                 message: "User not found.",
-                userExists: false,
             });
         }
 
         return res.status(200).json({
             message: "Transaction added successfully.",
-            user,
+            userDetails: user,
         });
     } catch (error) {
         logger.error(error.message);

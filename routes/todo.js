@@ -1,5 +1,5 @@
 const express = require("express");
-const { InsertTodo } = require("../controllers/todo/insertToDo");
+const { InsertTodo } = require("../controllers/todo/InsertToDo");
 const authenticateToken = require("../middleware/auth");
 
 const ToDoRoute = express.Router();
