@@ -5,8 +5,6 @@ const UserRoute = require("./user");
 
 const app = express();
 
-app.use("/todo", AuthRoute);
-app.use("/todo", ToDoRoute);
-app.use("/todo", UserRoute);
+app.use("/todo", [AuthRoute, ToDoRoute, UserRoute]);
 
 module.exports = app;
