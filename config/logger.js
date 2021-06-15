@@ -4,6 +4,7 @@
  */
 
 const { createLogger, format, transports } = require("winston");
+require("dotenv").config();
 
 const options = {
     file: {
@@ -39,7 +40,6 @@ const options = {
 
 const fileTransport = new transports.File(options.file);
 const consoleTransport = new transports.Console(options.console);
-
 const logger = createLogger({
     transports:
         process.env.ENV === "DEV"
